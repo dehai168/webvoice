@@ -1,0 +1,3 @@
+{
+    defaultDe: 'wav'
+}
