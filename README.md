@@ -16,13 +16,16 @@
 1. 构建blob对象
 2. Audio标签进行播放
 3. 浏览器支持情况
+
 ||Chrome|IE|FireFox|Safari|Opera|
 |---|---|---|---|---|---|
 |<audio>|4.0|9.0|3.5|4.0|10.5|
 |mp3|Y|Y|Y|Y|Y|
 |wav|Y|N|Y|Y|Y|
 |ogg|Y|N|Y|N|Y|
+
 4. media types
+
 |file format|media type|
 |---|---|
 |mp3|audio/mpeg|
