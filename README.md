@@ -1,0 +1,2 @@
+# audio.js
+一个网页语音对讲库。通过AudioContext对象进行语音获取，然后进行JavaScript的编码，通过Websocket进行发送，任意后台转发，通过Websocket进行接受，通过h5的audio标签进行音频的播放！
