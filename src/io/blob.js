@@ -15,20 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Media } from './core/media';
-import { Player } from "./core/player";
+export class BlobData {
+    constructor() {
 
-let audiojs = {};
-let media = new Media();
-
-audiojs.isSupported = media.isSupported();
-audiojs.createPlayer = new Player(audioEle, config);
-
-Object.defineProperty(audiojs, 'version', {
-    enumerable: true,
-    get: function() {
-        return '1.0.1';
     }
-});
-
-export { audiojs };
+    static wav(data) {
+        return new Blob([data], {
+            type: 'audio/wav'
+        })
+    }
+}

@@ -1,26 +1,30 @@
 {
-    "name": "audio.js",
-    "version": "1.0.0",
-    "description": "a audio solution for browser",
-    "main": "audio.js",
-    "scripts": {
-        "build": "node build/build.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/dehai168/audio.js.git"
-    },
-    "keywords": [
-        "audio"
-    ],
-    "author": "level",
-    "license": "Apache 2.0",
-    "bugs": {
-        "url": "https://github.com/dehai168/audio.js/issues"
-    },
-    "homepage": "https://github.com/dehai168/audio.js#readme",
-    "devDependencies": {
-        "webpack": "^3.8.1"
-    }
+  "name": "audio.js",
+  "version": "1.0.0",
+  "description": "a audio solution for browser",
+  "main": "audio.js",
+  "scripts": {
+    "dev": "webpack-dev-server --open --config build/webpack.config.js",
+    "build": "node build/build.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dehai168/audio.js.git"
+  },
+  "keywords": [
+    "audio"
+  ],
+  "author": "level",
+  "license": "Apache",
+  "bugs": {
+    "url": "https://github.com/dehai168/audio.js/issues"
+  },
+  "homepage": "https://github.com/dehai168/audio.js#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "webpack": "^3.8.1"
+  }
 }

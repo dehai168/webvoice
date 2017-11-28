@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2017 Streamax. All Rights Reserved.
  *
- * @author wang dehai <dehai168@gmail.com>
+ * @author level <dehai168@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
