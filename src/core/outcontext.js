@@ -15,22 +15,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Media } from './core/media';
-import { Player } from "./core/player";
+import { Context } from "./context";
 
-let audiojs = {};
-let media = new Media();
 
-audiojs.isSupported = media.isSupported();
-audiojs.createPlayer = function(config) {
-    return new Player(config);
-};
+export class OutAudioContext extends Context {
+    constructor() {
+        super();
 
-Object.defineProperty(audiojs, 'version', {
-    enumerable: true,
-    get: function() {
-        return '0.0.1';
+        this._audioBufferSource.connect(this._context.destination);
+        this._audioBufferSource.start(0);
     }
-});
 
-export { audiojs };
+    push(arrayBuffer) {
+        this._context.decodeAudioData(arrayBuffer)
+            .then(audioBuffer => {
+                this._audioBufferSource.buffer = audioBuffer;
+            })
+            .catch(e => {
+                throw e;
+            });
+    }
+}

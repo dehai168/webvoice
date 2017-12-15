@@ -20,7 +20,7 @@ export class Encoder {
 
     }
 
-    wav(bytes, sampleRate, sampleBits) {
+    static wav(bytes, sampleRate, sampleBits) {
         let dataLength = bytes.length * (sampleBits / 8);
         let buffer = new ArrayBuffer(44 + dataLength);
         let data = new DateView(buffer);
