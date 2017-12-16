@@ -23,21 +23,21 @@ export class Encoder {
     static wav(bytes, sampleRate, sampleBits) {
         let dataLength = bytes.length * (sampleBits / 8);
         let buffer = new ArrayBuffer(44 + dataLength);
-        let data = new DateView(buffer);
+        let data = new DataView(buffer);
 
         let channelCount = 1; //单声道
         let offset = 0;
 
         let writeString = function(str) {
             for (let i = 0; i < str.length; i++) {
-                data.setUnit8(offset + i, str.charCodeAt(i));
+                data.setUint8(offset + i, str.charCodeAt(i));
             }
         };
         // https://baike.baidu.com/item/WAV
         writeString('RIFF');
         offset += 4;
 
-        data.setUnit32(offset, 36 + dataLength, true);
+        data.setUint32(offset, 36 + dataLength, true);
         offset += 4;
 
         writeString('WAVE');
@@ -46,31 +46,31 @@ export class Encoder {
         writeString('fmt ');
         offset += 4;
 
-        data.setUnit32(offset, 16, true);
+        data.setUint32(offset, 16, true);
         offset += 4;
 
-        data.setUnit16(offset, 1, true);
+        data.setUint16(offset, 1, true);
         offset += 2;
 
-        data.setUnit16(offset, channelCount, true);
+        data.setUint16(offset, channelCount, true);
         offset += 2;
 
-        data.setUnit32(offset, sampleRate, true);
+        data.setUint32(offset, sampleRate, true);
         offset += 4;
 
-        data.setUnit32(offset, channelCount * sampleRate * (sampleBits / 8), true);
+        data.setUint32(offset, channelCount * sampleRate * (sampleBits / 8), true);
         offset += 4;
 
-        data.setUnit16(offset, channelCount * (sampleBits / 8), true);
+        data.setUint16(offset, channelCount * (sampleBits / 8), true);
         offset += 2;
 
-        data.setUnit16(offset, sampleBits, true);
+        data.setUint16(offset, sampleBits, true);
         offset += 2;
 
         writeString('data');
         offset += 4;
 
-        data.setUnit32(offset, dataLength, true);
+        data.setUint32(offset, dataLength, true);
         offset += 4;
 
         if (sampleBits === 8) {

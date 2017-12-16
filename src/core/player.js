@@ -19,23 +19,25 @@ import { Media } from "./media";
 import { InContext } from "./incontext";
 import { OutAudioContext } from "./outcontext";
 import { defaultConfig } from "../config";
-import { BlobData } from "../io/blob";
 import { Encoder } from "../io/encoder";
 import { WS } from "../net/ws";
 
 export class Player {
     constructor(config) {
         let that = this;
-        //this._audioEle = audioEle;
+        let outcontext = new OutAudioContext(that._config);
         this._config = {};
-        Object.assign(this._config, config ? config : defaultConfig);
+        Object.assign(this._config, defaultConfig, config ? config : defaultConfig);
         this._media = new Media();
         this._incontext = null;
-        this._outcontext = new OutAudioContext();
         this._ws = new WS(this._config.url);
         this._ws.on('received', function(dataBuffer) {
-            that._outcontext.push(dataBuffer);
+            outcontext.start();
+            outcontext.pushAudioData(dataBuffer);
         });
+    }
+    ready() {
+        let that = this;
         this._media.promiseStream()
             .then(medisStream => {
                 that._incontext = new InContext(that._config, medisStream);
@@ -45,13 +47,18 @@ export class Player {
     }
 
     speak() {
-        this._incontext.init();
+        if (this._incontext) {
+            this._incontext.start();
+        }
     }
 
     send() {
-        let dataBuffer = this._incontext.push();
-        let wavDataBuffer = Encoder.wav(dataBuffer, this._config.outputSampleRate, this._config.outputSampleBits);
-        let wavBlob = BlobData.wav(wavDataBuffer);
-        this._ws.send(wavBlob);
+        if (this._incontext) {
+            let dataBuffer = this._incontext.get();
+            let wavDataBuffer = Encoder.wav(dataBuffer, this._config.outputSampleRate, this._config.outputSampleBits);
+            this._ws.send(wavDataBuffer);
+            this._incontext.stop();
+            this._incontext.clear();
+        }
     }
 }

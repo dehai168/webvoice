@@ -20,7 +20,7 @@ export class WS {
     constructor(url) {
         this._isConnected = false;
         this._websocket = new WebSocket(url);
-        this._websocket.binaryType = "blob"; //arraybuffer
+        this._websocket.binaryType = "arraybuffer"; //blob,arraybuffer
         this._receivedEvent = null;
         this._errorEvent = null;
         let that = this;

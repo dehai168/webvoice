@@ -9,11 +9,13 @@
 </head>
 
 <body>
+    <button type="button" onclick="ready()">ready go</button>
     <h5>按住a说话，松开发送</h5>
     <script>
+        var player = null;
         if (audiojs.isSupported) {
-            var player = audiojs.createPlayer({
-                url: 'wss://192.168.151.2:8888'
+            player = audiojs.createPlayer({
+                url: 'wss://192.168.151.151:8888'
             });
             document.onkeydown = function(e) {
                 if (e.keyCode === 65) {
@@ -25,6 +27,10 @@
                     player.send();
                 }
             }
+        }
+
+        function ready() {
+            player.ready();
         }
     </script>
 </body>

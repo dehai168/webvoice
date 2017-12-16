@@ -34,6 +34,7 @@ var wss = new ws.Server({ server: server });
 
 wss.on('connection', function(o) {
     o.on('message', function(message) {
+        fs.writeFile(`${new Date().getTime()}.wav`, message);
         o.send(message);
     });
 });

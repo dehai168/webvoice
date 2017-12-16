@@ -24,7 +24,7 @@ export class XHR {
         let that = this;
         window.setInterval(function() {
             let xhr = new XMLHttpRequest();
-            xhr.responseType = "blob"; //arraybuffer
+            xhr.responseType = "arraybuffer"; //blob,arraybuffer
             xhr.open("get", url, true);
             xhr.onload = function(e) {
                 if (xhr.readyState === 4 && xhr.response && that._receivedEvent) {

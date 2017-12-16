@@ -18,76 +18,68 @@
 import { Context } from "./context";
 
 export class InContext extends Context {
+    /**
+     * 
+     * @param {object} config 
+     * @param {stream} mediaStream 
+     */
     constructor(config, mediaStream) {
-        super();
+
+        super(config);
 
         this._size = 0;
         this._buffer = [];
-        this._inputSampleRate = this._context.sampleRate; //输入采样率
-        this._inputSampleBits = config.inputSampleBits; //输入采样位数
-        this._outSampleRate = config.outSampleRate; //输出采样率
-        this._outSampleBits = config.outSampleBits; //输出采样位数
 
+        this._scriptProcessorNode = this._context.createScriptProcessor(this._config.bufferSize, this._config.numberInputChannels, this._config.numberOutputChannels);
         this._mediaStreamAudioSourceNode = this._context.createMediaStreamSource(mediaStream);
-        this._mediaStreamAudioSourceNode.connect(this._scriptProcessorNode);
-        this._scriptProcessorNode.connect(this._context.destination);
 
         let that = this;
         this._scriptProcessorNode.onaudioprocess = function(audioProcessEvent) {
             let inputBuffer = audioProcessEvent.inputBuffer;
-            let outputBuffer = audioProcessEvent.outputBuffer;
-
-            for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
+            //TODO 多个通道塞数据可能有问题
+            for (let channel = 0; channel < inputBuffer.numberOfChannels; channel++) {
                 let inputData = inputBuffer.getChannelData(channel);
-                let outputData = outputBuffer.getChannelData(channel);
 
-                for (let index = 0; index < inputBuffer.length; index++) {
-                    outputData[index] = inputBuffer[index];
-                }
-
-                that._push(outputData);
+                that._buffer.push(new Float32Array(inputData));
+                that._size += inputData.length;
             }
-        };
-
-        this._push = function(data) {
-            this._buffer.push(new Float32Array(data));
-            this._size += this._buffer.length;
-        };
-
-        this._clear = function() {
-            this._buffer.length = 0;
-            this._size = 0;
-        };
-
-        this._compress = function() {
-            //合并
-            let data = new Float32Array(this._size);
-            let offset = 0;
-            for (let index = 0; index < this._buffer.length; index++) {
-                data.set(this._buffer[index], offset);
-                offset += this._buffer[index].length;
-            }
-            //压缩
-            let compression = parseInt(this._inputSampleRate / this._outSampleRate);
-            let length = data.length / compression;
-            let result = new Float32Array(length);
-            let index = 0,
-                j = 0;
-            while (index < length) {
-                result[index] = data[j];
-                j += compression;
-                index++;
-            }
-            return result;
         };
     }
 
-    init() {
-        this._clear();
+    clear() {
+        this._buffer.length = 0;
+        this._size = 0;
     }
 
-    push() {
-        let dataBuffer = this._compress();
-        return dataBuffer();
+    start() {
+        this._mediaStreamAudioSourceNode.connect(this._scriptProcessorNode);
+        this._scriptProcessorNode.connect(this._context.destination);
+    }
+    get() {
+        let inputSampleRate = this._context.sampleRate; //输入采样率
+        let outSampleRate = this._config.outputSampleRate; //输出采样率
+        //合并
+        let data = new Float32Array(this._size);
+        let offset = 0;
+        for (let index = 0; index < this._buffer.length; index++) {
+            data.set(this._buffer[index], offset);
+            offset += this._buffer[index].length;
+        }
+        //压缩
+        let compression = parseInt(inputSampleRate / outSampleRate);
+        let length = data.length / compression;
+        let result = new Float32Array(length);
+        let index = 0,
+            j = 0;
+        while (index < length) {
+            result[index] = data[j];
+            j += compression;
+            index++;
+        }
+        return result;
+    }
+    stop() {
+        this._mediaStreamAudioSourceNode.disconnect();
+        this._scriptProcessorNode.disconnect();
     }
 }

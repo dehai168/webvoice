@@ -19,20 +19,42 @@ import { Context } from "./context";
 
 
 export class OutAudioContext extends Context {
-    constructor() {
-        super();
-
-        this._audioBufferSource.connect(this._context.destination);
-        this._audioBufferSource.start(0);
+    constructor(config) {
+        super(config);
     }
+    start() {
+            let gainNode = this._context.createGain();
+            this._audioBufferSourceNode = this._context.createBufferSource();
+            this._audioBufferSourceNode.connect(gainNode);
+            gainNode.connect(this._context.destination);
+            this._audioBufferSourceNode.start();
+        }
+        /**
+         * 放入已经压缩过的音频文件数据(audio.wav/audio.mp3)
+         * @param {ArrayBuffer} audioData 音频数据
+         */
+    pushAudioData(audioData) {
 
-    push(arrayBuffer) {
-        this._context.decodeAudioData(arrayBuffer)
-            .then(audioBuffer => {
-                this._audioBufferSource.buffer = audioBuffer;
-            })
-            .catch(e => {
-                throw e;
-            });
+            this._context.decodeAudioData(audioData)
+                .then(audioBuffer => {
+                    this._audioBufferSourceNode.buffer = audioBuffer;
+                })
+                .catch(e => {
+                    throw e;
+                });
+        }
+        /**
+         * 放入已经压缩过的原始音频数据流
+         * @param {Array} arrayBuffer 数据
+         */
+    pushDataArray(arrayBuffer) {
+        let audioBuffer = this._context.createBuffer(this._config.numberInputChannels, this._context.sampleRate * 5, this._context.sampleRate);
+        for (let index = 0; index < this._config.numberInputChannels.length; index++) {
+            let tempBuffer = audioBuffer.getChannelData(index); //TODO
+            for (let index2 = 0; index2 < array.length; index2++) {
+                tempBuffer[index2] = array[index2];
+            }
+        }
+        this._audioBufferSourceNode.buffer = audioBuffer;
     }
 }
