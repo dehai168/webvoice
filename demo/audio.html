@@ -10,20 +10,35 @@
 
 <body>
     <button type="button" onclick="ready()">ready go</button>
+    <label for="time">时间：</label>
+    <input type="text" name="time" id="time" value="0">
     <h5>按住a说话，松开发送</h5>
     <script>
         var player = null;
+        var flag = null;
+        var isSpeaking = false;
         if (audiojs.isSupported) {
             player = audiojs.createPlayer({
                 url: 'wss://192.168.151.151:8888'
             });
             document.onkeydown = function(e) {
                 if (e.keyCode === 65) {
-                    player.speak();
+                    if (!isSpeaking) {
+                        isSpeaking = true;
+                        player.speak();
+                        let ele = document.getElementById('time');
+                        ele.value = 1;
+                        flag = window.setInterval(function() {
+                            ele.value = parseInt(ele.value) + 1;
+                        }, 1000);
+                    }
                 }
             }
             document.onkeyup = function(e) {
                 if (e.keyCode === 65) {
+                    isSpeaking = false;
+                    window.clearInterval(flag);
+                    document.getElementById('time').value = 0;
                     player.send();
                 }
             }
