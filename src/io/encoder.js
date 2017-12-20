@@ -20,12 +20,12 @@ export class Encoder {
 
     }
 
-    static wav(bytes, sampleRate, sampleBits) {
+    static wav(bytes, sampleRate, sampleBits, outChannelsNumber) {
         let dataLength = bytes.length * (sampleBits / 8);
         let buffer = new ArrayBuffer(44 + dataLength);
         let data = new DataView(buffer);
 
-        let channelCount = 1; //单声道
+        let channelCount = outChannelsNumber;
         let offset = 0;
 
         let writeString = function(str) {

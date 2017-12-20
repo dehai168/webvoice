@@ -48,8 +48,8 @@ export class OutAudioContext extends Context {
          * @param {Array} arrayBuffer 数据
          */
     pushDataArray(arrayBuffer) {
-        let audioBuffer = this._context.createBuffer(this._config.numberInputChannels, this._context.sampleRate * 5, this._context.sampleRate);
-        for (let index = 0; index < this._config.numberInputChannels.length; index++) {
+        let audioBuffer = this._context.createBuffer(this._config.numberChannels, this._context.sampleRate * 5, this._context.sampleRate);
+        for (let index = 0; index < this._config.numberChannels.length; index++) {
             let tempBuffer = audioBuffer.getChannelData(index); //TODO
             for (let index2 = 0; index2 < array.length; index2++) {
                 tempBuffer[index2] = array[index2];

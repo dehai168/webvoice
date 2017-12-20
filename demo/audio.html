@@ -13,13 +13,27 @@
     <label for="time">时间：</label>
     <input type="text" name="time" id="time" value="0">
     <h5>按住a说话，松开发送</h5>
+
+    <div style="margin-top:50px;border:1px solid gray;width:200px;height:100px;padding:5px;">
+        <button type="button" onclick="speak()">讲话</button>
+        <button type="button" onclick="exportwav()">获取wav</button>
+        <button type="button" onclick="forcedownload()">下载wav</button>
+    </div>
+    <ul id="recordingslist" style="list-style:none;margin:0;padding:0;">
+
+    </ul>
     <script>
         var player = null;
         var flag = null;
         var isSpeaking = false;
         if (audiojs.isSupported) {
             player = audiojs.createPlayer({
-                url: 'wss://192.168.151.151:8888'
+                url: 'wss://192.168.151.151:8888',
+                numberChannels: 2,
+                bufferSize: 4096,
+                inputSampleBits: 8, //输入采样位数 8,16
+                outputSampleRate: 7350, //输出采样率 7350
+                outputSampleBits: 8 //输出采样位数 8,16
             });
             document.onkeydown = function(e) {
                 if (e.keyCode === 65) {
@@ -46,6 +60,32 @@
 
         function ready() {
             player.ready();
+        }
+
+        function speak() {
+            player.speak();
+        }
+
+        function exportwav() {
+            player.exportwav(function(blob) {
+                var url = URL.createObjectURL(blob);
+                var li = document.createElement('li');
+                var au = document.createElement('audio');
+                var hf = document.createElement('a');
+
+                au.controls = true;
+                au.src = url;
+                hf.href = url;
+                hf.download = new Date().toISOString() + '.wav';
+                hf.innerHTML = hf.download;
+                li.appendChild(au);
+                li.appendChild(hf);
+                recordingslist.appendChild(li);
+            });
+        }
+
+        function forcedownload() {
+            player.forcedownload();
         }
     </script>
 </body>

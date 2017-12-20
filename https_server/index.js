@@ -12,19 +12,27 @@ var server = https.createServer(options, function(req, res) {
             if (err) {
                 return;
             }
-            // res.writeHead({
-            //     'Content-Type': 'aplication/javascript'
-            // });
             res.end(data);
         });
-    } else {
+    } else if (req.url.indexOf('recorder.js') > -1) {
+        fs.readFile('../demo/recorder.js', function(err, data) {
+            if (err) {
+                return;
+            }
+            res.end(data);
+        });
+    } else if (req.url.indexOf('recorder.html') > -1) {
+        fs.readFile('../demo/recorder.html', function(err, data) {
+            if (err) {
+                return;
+            }
+            res.end(data);
+        });
+    } else if (req.url.indexOf('audio.html') > -1) {
         fs.readFile('../demo/audio.html', function(err, data) {
             if (err) {
                 return;
             }
-            // res.writeHead({
-            //     'Content-Type': 'text/html'
-            // });
             res.end(data);
         });
     }

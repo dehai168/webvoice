@@ -21,6 +21,7 @@ import { OutAudioContext } from "./outcontext";
 import { defaultConfig } from "../config";
 import { Encoder } from "../io/encoder";
 import { WS } from "../net/ws";
+import { BlobData } from "../io/blob";
 
 export class Player {
     constructor(config) {
@@ -51,14 +52,42 @@ export class Player {
             this._incontext.start();
         }
     }
-
     send() {
         if (this._incontext) {
             let dataBuffer = this._incontext.get();
-            let wavDataBuffer = Encoder.wav(dataBuffer, this._config.outputSampleRate, this._config.outputSampleBits);
+            let wavDataBuffer = Encoder.wav(dataBuffer, this._config.outputSampleRate, this._config.outputSampleBits, this._config.numberChannels);
             this._ws.send(wavDataBuffer);
             this._incontext.stop();
             this._incontext.clear();
         }
+    }
+    getbuffer(cb) {
+        if (this._incontext && typeof cb === "function") {
+            let dataBuffer = this._incontext.get();
+            this._incontext.stop();
+            this._incontext.clear();
+            cb(dataBuffer);
+        }
+    }
+    exportwav(cb) {
+        if (this._incontext && typeof cb === "function") {
+            let dataBuffer = this._incontext.get();
+            let wavDataBuffer = Encoder.wav(dataBuffer, this._config.outputSampleRate, this._config.outputSampleBits, this._config.numberChannels);
+            let wavblob = BlobData.wav(wavDataBuffer);
+            this._incontext.stop();
+            this._incontext.clear();
+            cb(wavblob);
+        }
+    }
+    forcedownload(filename) {
+        this.exportwav(function(blob) {
+            let url = (window.URL || window.webkitURL).createObjectURL(blob);
+            let link = window.document.createElement('a');
+            link.href = url;
+            link.download = filename || new Date().toISOString() + '.wav';
+            let click = document.createEvent("Event");
+            click.initEvent("click", true, true);
+            link.dispatchEvent(click);
+        });
     }
 }
