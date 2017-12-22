@@ -27,7 +27,8 @@ export class InContext extends Context {
 
         super(config);
 
-        this._size = 0;
+        this._lsize = 0;
+        this._rsize = 0;
         this._LBuffer = [];
         this._RBuffer = [];
         this._recording = false;
@@ -47,10 +48,10 @@ export class InContext extends Context {
                 let inputData = inputBuffer.getChannelData(channel);
                 if (channel === 0) {
                     that._LBuffer.push(new Float32Array(inputData));
-                    that._size += inputData.length;
+                    that._lsize += inputData.length;
                 } else if (channel === 1) {
                     that._RBuffer.push(new Float32Array(inputData));
-                    that._size += inputData.length;
+                    that._rsize += inputData.length;
                 }
             }
         };
@@ -59,7 +60,8 @@ export class InContext extends Context {
     clear() {
         this._LBuffer.length = 0;
         this._RBuffer.length = 0;
-        this._size = 0;
+        this._lsize = 0;
+        this._lsize = 0;
     }
 
     start() {
@@ -96,10 +98,10 @@ export class InContext extends Context {
         //合并
         let data = null;
         if (this._config.numberChannels === 1) {
-            data = mergeBuffers(this._LBuffer, this._size);
+            data = mergeBuffers(this._LBuffer, this._lsize);
         } else if (this._config.numberChannels === 2) {
-            let dataL = mergeBuffers(this._LBuffer, this._size / 2);
-            let dataR = mergeBuffers(this._RBuffer, this._size / 2);
+            let dataL = mergeBuffers(this._LBuffer, this._lsize);
+            let dataR = mergeBuffers(this._RBuffer, this._rsize);
             data = interleave(dataL, dataR);
         }
         //压缩
@@ -108,26 +110,12 @@ export class InContext extends Context {
         let result = new Float32Array(length);
         let index = 0,
             j = 0;
-        if (this._config.numberChannels === 1) {
-            while (index < length) {
-                result[index] = data[j];
-                j += compression;
-                index++;
-            }
-            return result;
-        } else if (this._config.numberChannels === 2) {
-            while (index < length) {
-                // result[index] = data[j];
-                // j += compression;
-                // index++;
-                //这个压缩最后有个破音
-                result[index] = data[j];
-                result[++index] = data[++j];
-                j += compression * 2;
-                index++;
-            }
-            return result;
+        while (index < length) {
+            result[index] = data[j];
+            j += compression;
+            index++;
         }
+        return result;
     }
     stop() {
         this._recording = false;
