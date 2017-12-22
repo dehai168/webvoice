@@ -28,7 +28,7 @@ var server = https.createServer(options, function(req, res) {
             }
             res.end(data);
         });
-    } else if (req.url.indexOf('audio.html') > -1) {
+    } else {
         fs.readFile('../demo/audio.html', function(err, data) {
             if (err) {
                 return;

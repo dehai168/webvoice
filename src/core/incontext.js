@@ -47,10 +47,11 @@ export class InContext extends Context {
                 let inputData = inputBuffer.getChannelData(channel);
                 if (channel === 0) {
                     that._LBuffer.push(new Float32Array(inputData));
+                    that._size += inputData.length;
                 } else if (channel === 1) {
                     that._RBuffer.push(new Float32Array(inputData));
+                    that._size += inputData.length;
                 }
-                that._size += inputData.length;
             }
         };
     }
@@ -116,14 +117,14 @@ export class InContext extends Context {
             return result;
         } else if (this._config.numberChannels === 2) {
             while (index < length) {
-                result[index] = data[j];
-                j += compression;
-                index++;
-                //这个压缩最后有个破音,先用单通道的
                 // result[index] = data[j];
-                // result[++index] = data[++j];
-                // j += compression * 2;
+                // j += compression;
                 // index++;
+                //这个压缩最后有个破音
+                result[index] = data[j];
+                result[++index] = data[++j];
+                j += compression * 2;
+                index++;
             }
             return result;
         }
