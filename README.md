@@ -57,4 +57,4 @@
 |声道|单声道(nx1矩阵点)、立体声(nx2矩阵点)|
 
 6. 参考资料
-> (网页音频接口的基本概念)[https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API]
+>[网页音频接口的基本概念](https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API)
