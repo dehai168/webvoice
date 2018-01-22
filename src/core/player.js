@@ -22,34 +22,53 @@ import { defaultConfig } from "../config";
 import { Encoder } from "../io/encoder";
 import { WS } from "../net/ws";
 import { BlobData } from "../io/blob";
+import { As3Context } from "./as3context";
+import { Audio } from "./audio";
 
 export class Player {
     constructor(config) {
-        let that = this;
-        let outcontext = new OutAudioContext(that._config);
         this._config = {};
         Object.assign(this._config, defaultConfig, config ? config : defaultConfig);
-        this._media = new Media();
+        let that = this;
+        let outcontext = new OutAudioContext(that._config);
+        let audio = new Audio();
         this._incontext = null;
+        this._as3context = null;
+
+        if (!outcontext.isSupport()) {
+            this._as3context = new As3Context(that._config);
+        }
         this._ws = new WS(this._config.url);
         this._ws.on('received', function(dataBuffer) {
-            outcontext.start();
-            outcontext.pushAudioData(dataBuffer);
+            if (outcontext.isSupport()) {
+                outcontext.start();
+                outcontext.pushAudioData(dataBuffer);
+            } else {
+                let wavblob = BlobData.wav(dataBuffer);
+                audio.play(wavblob);
+            }
         });
     }
     ready() {
         let that = this;
-        this._media.promiseStream()
-            .then(medisStream => {
-                that._incontext = new InContext(that._config, medisStream);
-            }).catch(e => {
-                throw e;
-            });
+        let media = new Media();
+        if (media._isSupported) {
+            media.promiseStream()
+                .then(medisStream => {
+                    that._incontext = new InContext(that._config, medisStream);
+                }).catch(e => {
+                    console.log(e);
+                });
+        } else {
+            this._as3context.ready();
+        }
     }
 
     speak() {
         if (this._incontext) {
             this._incontext.start();
+        } else if (this._as3context) {
+            this._as3context.start();
         }
     }
     send() {
@@ -59,6 +78,12 @@ export class Player {
             this._ws.send(wavDataBuffer);
             this._incontext.stop();
             this._incontext.clear();
+        } else if (this._as3context) {
+            let dataBuffer = this._as3context.get();
+            let wavDataBuffer = Encoder.wav(dataBuffer, this._config.outputSampleRate, this._config.outputSampleBits, this._config.numberChannels);
+            this._ws.send(wavDataBuffer);
+            this._as3context.stop();
+            this._as3context.clear();
         }
     }
     getbuffer(cb) {
@@ -66,6 +91,11 @@ export class Player {
             let dataBuffer = this._incontext.get();
             this._incontext.stop();
             this._incontext.clear();
+            cb(dataBuffer);
+        } else if (this._as3context) {
+            let dataBuffer = this._as3context.get();
+            this._as3context.stop();
+            this._as3context.clear();
             cb(dataBuffer);
         }
     }
@@ -76,6 +106,13 @@ export class Player {
             let wavblob = BlobData.wav(wavDataBuffer);
             this._incontext.stop();
             this._incontext.clear();
+            cb(wavblob);
+        } else if (this._as3context) {
+            let dataBuffer = this._as3context.get();
+            let wavDataBuffer = Encoder.wav(dataBuffer, this._config.outputSampleRate, this._config.outputSampleBits, this._config.numberChannels);
+            let wavblob = BlobData.wav(wavDataBuffer);
+            this._as3context.stop();
+            this._as3context.clear();
             cb(wavblob);
         }
     }

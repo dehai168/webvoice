@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="../dist/audio.js"></script>
+    <script src="./swfobject.js"></script>
 </head>
 
 <body>
@@ -22,13 +23,17 @@
     <ul id="recordingslist" style="list-style:none;margin:0;padding:0;">
 
     </ul>
+    <div id="div_flash" style="width:400px;height:400px;">
+
+    </div>
     <script>
         var player = null;
         var flag = null;
         var isSpeaking = false;
         if (audiojs.isSupported) {
             player = audiojs.createPlayer({
-                url: 'wss://192.168.151.151:8888',
+                domid: 'div_flash',
+                url: 'wss://127.0.0.1:8888',
                 numberChannels: 1,
                 bufferSize: 4096,
                 inputSampleBits: 8, //输入采样位数 8,16

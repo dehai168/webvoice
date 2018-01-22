@@ -56,7 +56,6 @@ export class InContext extends Context {
             }
         };
     }
-
     clear() {
         this._LBuffer.length = 0;
         this._RBuffer.length = 0;

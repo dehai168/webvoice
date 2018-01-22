@@ -15,22 +15,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export class Context {
-    /**
-     * 
-     * @param {object} config 
-     */
-    constructor(config) {
-        this._context = null;
-        this._config = config;
-        try {
-            window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
-            this._context = new AudioContext();
-        } catch (e) {
-            console.log(e);
-        }
+export class Audio {
+    constructor() {
+        let audio = document.createElement('audio');
+        audio.setAttribute('autoplay', true);
+        audio.setAttribute('style', 'display:none;');
+        audio.id = 'audioas3_' + new Date().getTime();
+        let body = document.querySelector('body');
+        body.appendChild(audio);
+        this._audio = document.getElementById(audio.id);
     }
-    isSupport() {
-        return !(this._context === null);
+    play(blob) {
+        this._audio.src = window.URL.createObjectURL(blob);
     }
 }

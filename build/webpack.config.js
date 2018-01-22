@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 module.exports = {
-    entry: './src/audio.js',
+    entry: ['babel-polyfill', './src/audio.js'],
     output: {
         libraryTarget: 'umd',
         umdNamedDefine: true,
@@ -16,6 +16,6 @@ module.exports = {
         }]
     },
     plugins: [
-        new webpack.optimize.UglifyJsPlugin()
+        //new webpack.optimize.UglifyJsPlugin()
     ]
 }

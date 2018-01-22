@@ -17,10 +17,17 @@
  */
 export class Media {
     constructor() {
+        this._isSupported = true;
+        this._constraints = {
+            audio: true,
+            video: false
+        };
+        let that = this;
         let oldUserMedia = function(constraints) {
             let getUserMedia = (navigator.getUserMedia || navigator.webketGetUserMedia || navigator.mozGetUserMedia);
 
             if (!getUserMedia) {
+                that._isSupported = false;
                 return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
             }
 
@@ -34,20 +41,8 @@ export class Media {
         if (navigator.mediaDevices.getUserMedia === undefined) {
             navigator.mediaDevices.getUserMedia = oldUserMedia;
         }
-        this._constraints = {
-            audio: true,
-            video: false
-        };
-    }
 
-    get userMedia() {
-        return navigator.mediaDevices.getUserMedia;
     }
-
-    isSupported() {
-        return !(navigator.mediaDevices.getUserMedia === undefined);
-    }
-
     promiseStream() {
         let pm = new Promise((res, rej) => {
             navigator.mediaDevices.getUserMedia(this._constraints)

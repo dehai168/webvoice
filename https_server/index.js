@@ -21,6 +21,13 @@ var server = https.createServer(options, function(req, res) {
             }
             res.end(data);
         });
+    } else if (req.url.indexOf('audio.js') > -1) {
+        fs.readFile('./dist/audio.js', function(err, data) {
+            if (err) {
+                return;
+            }
+            res.end(data);
+        });
     } else if (req.url.indexOf('expressInstall.swf') > -1) {
         fs.readFile('./demo/expressInstall.swf', function(err, data) {
             if (err) {
@@ -42,7 +49,7 @@ var wss = new ws.Server({ server: server });
 
 wss.on('connection', function(o) {
     o.on('message', function(message) {
-        fs.writeFile(`${new Date().getTime()}.wav`, message);
+        fs.writeFile(`./demo/${new Date().getTime()}.wav`, message);
         o.send(message);
     });
 });
