@@ -42,10 +42,14 @@ export class As3Context {
         }
         if (swfobject) {
             let ele = document.getElementById(domid);
+            let that = this;
             swfobject.embedSWF(
-                swfpath, domid, ele.clientWidth, ele.clientHeight, '25.0.0', './expressInstall.swf', flashvars, params, attributes
+                swfpath, domid, ele.clientWidth, ele.clientHeight, '25.0.0', './expressInstall.swf', flashvars, params, attributes,
+                function() {
+                    that.as3ele = document.getElementById(attributes.id);
+                }
             );
-            this.as3ele = document.getElementById(attributes.id);
+
         } else {
             throw new Error('the swfobject is need');
             return;
@@ -54,22 +58,22 @@ export class As3Context {
     }
 
     ready() {
-        this.ready();
+        this.as3ele.ready();
     }
 
     start() {
-        this.start();
+        this.as3ele.start();
     }
 
     stop() {
-        this.stop();
+        this.as3ele.stop();
     }
 
     clear() {
-        this.clear();
+        this.as3ele.clear();
     }
 
     get() {
-        return this.getbuffer();
+        return this.as3ele.getbuffer();
     }
 }

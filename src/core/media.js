@@ -17,7 +17,6 @@
  */
 export class Media {
     constructor() {
-        this._isSupported = true;
         this._constraints = {
             audio: true,
             video: false
@@ -27,7 +26,6 @@ export class Media {
             let getUserMedia = (navigator.getUserMedia || navigator.webketGetUserMedia || navigator.mozGetUserMedia);
 
             if (!getUserMedia) {
-                that._isSupported = false;
                 return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
             }
 

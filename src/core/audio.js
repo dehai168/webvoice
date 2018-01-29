@@ -19,7 +19,9 @@ export class Audio {
     constructor() {
         let audio = document.createElement('audio');
         audio.setAttribute('autoplay', true);
+        //audio.setAttribute('controls', true);
         audio.setAttribute('style', 'display:none;');
+        //audio.setAttribute('src', '1517023314958.wav');
         audio.id = 'audioas3_' + new Date().getTime();
         let body = document.querySelector('body');
         body.appendChild(audio);

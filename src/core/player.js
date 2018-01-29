@@ -52,16 +52,12 @@ export class Player {
     ready() {
         let that = this;
         let media = new Media();
-        if (media._isSupported) {
-            media.promiseStream()
-                .then(medisStream => {
-                    that._incontext = new InContext(that._config, medisStream);
-                }).catch(e => {
-                    console.log(e);
-                });
-        } else {
-            this._as3context.ready();
-        }
+        media.promiseStream()
+            .then(medisStream => {
+                that._incontext = new InContext(that._config, medisStream);
+            }).catch(e => {
+                that._as3context.ready();
+            });
     }
 
     speak() {
@@ -81,7 +77,7 @@ export class Player {
         } else if (this._as3context) {
             let dataBuffer = this._as3context.get();
             let wavDataBuffer = Encoder.wav(dataBuffer, this._config.outputSampleRate, this._config.outputSampleBits, this._config.numberChannels);
-            this._ws.send(wavDataBuffer);
+            this._ws.send(wavDataBuffer.buffer);
             this._as3context.stop();
             this._as3context.clear();
         }
@@ -110,7 +106,7 @@ export class Player {
         } else if (this._as3context) {
             let dataBuffer = this._as3context.get();
             let wavDataBuffer = Encoder.wav(dataBuffer, this._config.outputSampleRate, this._config.outputSampleBits, this._config.numberChannels);
-            let wavblob = BlobData.wav(wavDataBuffer);
+            let wavblob = BlobData.wav(wavDataBuffer.buffer);
             this._as3context.stop();
             this._as3context.clear();
             cb(wavblob);

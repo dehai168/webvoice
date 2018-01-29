@@ -23,43 +23,41 @@
     <ul id="recordingslist" style="list-style:none;margin:0;padding:0;">
 
     </ul>
-    <div id="div_flash" style="width:400px;height:400px;">
+    <div id="div_flash" style="width:400px;height:400px;float:right;">
 
     </div>
     <script>
         var player = null;
         var flag = null;
         var isSpeaking = false;
-        if (audiojs.isSupported) {
-            player = audiojs.createPlayer({
-                domid: 'div_flash',
-                url: 'wss://127.0.0.1:8888',
-                numberChannels: 1,
-                bufferSize: 4096,
-                inputSampleBits: 8, //输入采样位数 8,16
-                outputSampleRate: 7350, //输出采样率 7350
-                outputSampleBits: 8 //输出采样位数 8,16
-            });
-            document.onkeydown = function(e) {
-                if (e.keyCode === 65) {
-                    if (!isSpeaking) {
-                        isSpeaking = true;
-                        player.speak();
-                        let ele = document.getElementById('time');
-                        ele.value = 1;
-                        flag = window.setInterval(function() {
-                            ele.value = parseInt(ele.value) + 1;
-                        }, 1000);
-                    }
+        player = audiojs.createPlayer({
+            domid: 'div_flash',
+            url: 'wss://127.0.0.1:8888',
+            numberChannels: 1,
+            bufferSize: 4096,
+            inputSampleBits: 8, //输入采样位数 8,16
+            outputSampleRate: 7350, //输出采样率 7350
+            outputSampleBits: 8 //输出采样位数 8,16
+        });
+        document.onkeydown = function(e) {
+            if (e.keyCode === 65) {
+                if (!isSpeaking) {
+                    isSpeaking = true;
+                    player.speak();
+                    let ele = document.getElementById('time');
+                    ele.value = 1;
+                    flag = window.setInterval(function() {
+                        ele.value = parseInt(ele.value) + 1;
+                    }, 1000);
                 }
             }
-            document.onkeyup = function(e) {
-                if (e.keyCode === 65) {
-                    isSpeaking = false;
-                    window.clearInterval(flag);
-                    document.getElementById('time').value = 0;
-                    player.send();
-                }
+        }
+        document.onkeyup = function(e) {
+            if (e.keyCode === 65) {
+                isSpeaking = false;
+                window.clearInterval(flag);
+                document.getElementById('time').value = 0;
+                player.send();
             }
         }
 

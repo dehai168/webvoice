@@ -21,7 +21,6 @@ import { Player } from "./core/player";
 let audiojs = {};
 let media = new Media();
 
-audiojs.isSupported = media._isSupported;
 audiojs.createPlayer = function(config) {
     return new Player(config);
 };

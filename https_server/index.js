@@ -35,6 +35,13 @@ var server = https.createServer(options, function(req, res) {
             }
             res.end(data);
         });
+    } else if (req.url.indexOf('1517023314958.wav') > -1) {
+        fs.readFile('./demo/1517023314958.wav', function(err, data) {
+            if (err) {
+                return;
+            }
+            res.end(data);
+        });
     } else {
         fs.readFile('./demo/audio.html', function(err, data) {
             if (err) {
@@ -44,7 +51,9 @@ var server = https.createServer(options, function(req, res) {
         });
     }
 });
-
+server.on('error', function(error) {
+    console.log(error);
+});
 var wss = new ws.Server({ server: server });
 
 wss.on('connection', function(o) {
