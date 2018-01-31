@@ -24,11 +24,12 @@ import { WS } from "../net/ws";
 import { BlobData } from "../io/blob";
 import { As3Context } from "./as3context";
 import { Audio } from "./audio";
+import { PollFill } from "../utils/pollfill";
 
 export class Player {
     constructor(config) {
         this._config = {};
-        Object.assign(this._config, defaultConfig, config ? config : defaultConfig);
+        PollFill.deepAssign(this._config, defaultConfig, config ? config : defaultConfig);
         let that = this;
         let outcontext = new OutAudioContext(that._config);
         let audio = new Audio();
@@ -52,12 +53,16 @@ export class Player {
     ready() {
         let that = this;
         let media = new Media();
-        media.promiseStream()
-            .then(medisStream => {
-                that._incontext = new InContext(that._config, medisStream);
-            }).catch(e => {
-                that._as3context.ready();
-            });
+        if (window.Promise) {
+            media.promiseStream()
+                .then(medisStream => {
+                    that._incontext = new InContext(that._config, medisStream);
+                }).catch(e => {
+                    that._as3context.ready();
+                });
+        } else {
+            that._as3context.ready();
+        }
     }
 
     speak() {

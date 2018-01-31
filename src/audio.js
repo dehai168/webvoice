@@ -28,7 +28,7 @@ audiojs.createPlayer = function(config) {
 Object.defineProperty(audiojs, 'version', {
     enumerable: true,
     get: function() {
-        return '0.0.2';
+        return '0.0.3';
     }
 });
 

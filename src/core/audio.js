@@ -17,11 +17,13 @@
  */
 export class Audio {
     constructor() {
-        let audio = document.createElement('audio');
-        audio.setAttribute('autoplay', true);
-        //audio.setAttribute('controls', true);
+        //let audio = document.createElement('audio');
+        //audio.setAttribute('autoplay', true);
+        //IE 下的wav要bgsound播放
+        let audio = document.createElement('bgsound');
+        audio.setAttribute('loop', 'false');
+        audio.setAttribute('audostart', 'true');
         audio.setAttribute('style', 'display:none;');
-        //audio.setAttribute('src', '1517023314958.wav');
         audio.id = 'audioas3_' + new Date().getTime();
         let body = document.querySelector('body');
         body.appendChild(audio);
