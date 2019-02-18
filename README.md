@@ -29,7 +29,7 @@
 
 ### Document
 
-[API](https://github.com/dehai168/audio.js/blob/master/doc/api.md)
+[API](https://github.com/dehai168/audio.js/blob/master/docs/api.md)
 
 ### 音频格式浏览器支持情况
 
