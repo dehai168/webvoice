@@ -1,8 +1,14 @@
 # webvoice
 >一个网页语音对讲库。
+
+### 使用
+
+```js
+npm install webvoice --save
+```
 ### 设计
 
-![](https://github.com/dehai168/webvoice/blob/master/assets/design.png)
+![](https://github.com/dehai168/webvoice/blob/master/docs/assets/design.png)
 
 ### 采集
 1. 通过`MediaDevices.getUserMedia()`进行语音采集

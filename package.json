@@ -1,26 +1,26 @@
 {
-    "name": "audio.js",
-    "version": "1.0.0",
-    "description": "a audio solution for browser",
-    "main": "audio.js",
+    "name": "webvoice",
+    "version": "0.0.4",
+    "description": "a web voice solution for browser",
+    "main": "index.js",
     "scripts": {
-        "demo": "node https_server/index.js",
-        "build": "node build/build.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "server": "node https_server/index.js",
+        "build": "node build/build.js"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/dehai168/audio.js.git"
+        "url": "git+https://github.com/dehai168/webvoice.git"
     },
     "keywords": [
-        "audio"
+        "audio",
+        "webvoice"
     ],
     "author": "level",
     "license": "Apache",
     "bugs": {
-        "url": "https://github.com/dehai168/audio.js/issues"
+        "url": "https://github.com/dehai168/webvoice/issues"
     },
-    "homepage": "https://github.com/dehai168/audio.js#readme",
+    "homepage": "https://github.com/dehai168/webvoice#readme",
     "devDependencies": {
         "babel-core": "^6.26.0",
         "babel-loader": "^7.1.2",

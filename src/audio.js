@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Streamax. All Rights Reserved.
+ * Copyright (C) 2017 wangdehai. All Rights Reserved.
  *
  * @author level <dehai168@gmail.com>
  *
@@ -18,18 +18,18 @@
 import { Media } from './core/media';
 import { Player } from "./core/player";
 
-let audiojs = {};
+let webvoice = {};
 let media = new Media();
 
-audiojs.createPlayer = function(config) {
+webvoice.createPlayer = function(config) {
     return new Player(config);
 };
 
-Object.defineProperty(audiojs, 'version', {
+Object.defineProperty(webvoice, 'version', {
     enumerable: true,
     get: function() {
-        return '0.0.3';
+        return '0.0.4';
     }
 });
 
-export { audiojs };
+export { webvoice };

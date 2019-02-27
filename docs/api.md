@@ -1,6 +1,6 @@
 ## API
 
-### audiojs
+### webvoice
 
 >prop
 
@@ -16,7 +16,7 @@
 |createPlayer|object|object|播放器|
 
 ```js
-var player=audio.createPlayer({
+var player=webvoice.createPlayer({
     url: 'wss://ip:port', //交互数据地址
     numberChannels: 2, //通道 1,2
     bufferSize: 4096,  //缓冲区大小 2`n

@@ -1,11 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
 module.exports = {
-    entry: ['./src/audio.js'],
+    entry: ['./index.js'],
     output: {
         libraryTarget: 'umd',
         umdNamedDefine: true,
-        filename: 'audio.js',
+        filename: 'webvoice.js',
         path: path.resolve(__dirname, '../dist')
     },
     module: {

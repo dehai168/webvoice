@@ -3,3 +3,4 @@ npm-debug.log
 dist/audio.swf
 dist/expressInstall.swf
 dist/swfobject.js
+package-lock.json

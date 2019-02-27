@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>audio.js演示</title>
+    <title>webvoice演示</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://dehai167-dd.oss-cn-shanghai.aliyuncs.com/github/audio.js/audio.js"></script>
-    <script src="https://dehai167-dd.oss-cn-shanghai.aliyuncs.com/github/audio.js/swfobject.js"></script>
+    <script src="dist/webvoice.js"></script>
+    <script src="dist/swfobject.js"></script>
 </head>
 <body>
     <button type="button" onclick="ready()">ready go</button>
@@ -29,7 +29,7 @@
         var player = null;
         var flag = null;
         var isSpeaking = false;
-        player = audiojs.createPlayer({
+        player = webvoice.createPlayer({
             domid: 'div_flash',
             url: 'wss://127.0.0.1:8888',
             numberChannels: 1,
