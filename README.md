@@ -1,8 +1,8 @@
-# audio.js
+# webvoice
 >一个网页语音对讲库。
 ### 设计
 
-![](https://github.com/dehai168/audio.js/blob/master/assets/design.png)
+![](https://github.com/dehai168/webvoice/blob/master/assets/design.png)
 
 ### 采集
 1. 通过`MediaDevices.getUserMedia()`进行语音采集
@@ -29,7 +29,7 @@
 
 ### Document
 
-[API](https://github.com/dehai168/audio.js/blob/master/docs/api.md)
+[API](https://github.com/dehai168/webvoice/blob/master/docs/api.md)
 
 ### 音频格式浏览器支持情况
 
